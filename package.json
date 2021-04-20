@@ -8,7 +8,7 @@
   },
   "gypfile": true,
   "name": "sort-node",
-  "description": "C++ implementation of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
+  "description": "Node binding of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
   "version": "1.0.0",
   "directories": {
     "doc": "docs"
