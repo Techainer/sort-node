@@ -2,18 +2,6 @@
 
 using namespace Napi;
 
-bool isNapiValueInt(Napi::Env &env, Napi::Value &num)
-{
-    return env.Global()
-        .Get("Number")
-        .ToObject()
-        .Get("isInteger")
-        .As<Napi::Function>()
-        .Call({num})
-        .ToBoolean()
-        .Value();
-}
-
 SortNode::SortNode(const Napi::CallbackInfo& info) : ObjectWrap(info) {
     Napi::Env env = info.Env();
 
@@ -23,19 +11,28 @@ SortNode::SortNode(const Napi::CallbackInfo& info) : ObjectWrap(info) {
         return;
     }
 
-    if (isNapiValueInt(env, info[0]) {
+    if (!info[0].IsNumber()) {
         Napi::TypeError::New(env, "kMinHits must be an interger")
           .ThrowAsJavaScriptException();
         return;
     }
 
-    if (!info[1].IsNumber() || info[1] > 1 || info[1] < 0) {
+    auto kMinHits = info[0].As<Napi::Number>().DoubleValue();
+    if (fmod(kMinHits, 1) != 0)
+    {
+        Napi::TypeError::New(env, "kMinHits must be an interger")
+            .ThrowAsJavaScriptException();
+        return;
+    }
+
+    if (!info[1].IsNumber() || info[1].As<Napi::Number>().DoubleValue() > 1 || info[1].As<Napi::Number>().DoubleValue() < 0)
+    {
         Napi::TypeError::New(env, "kMinConfidence must be a float between 0 and 1")
             .ThrowAsJavaScriptException();
         return;
     }
 
-    this->kMinHits = int(info[0].As<Napi::Number>().DoubleValue());
+    this->kMinHits = int(kMinHits);
     this->kkMinConfidence = float(info[1].As<Napi::Number>().DoubleValue());
 }
 
@@ -58,7 +55,7 @@ Napi::Value SortNode::update(const Napi::CallbackInfo& info) {
     std::vector<std::vector<float>> dets;
     auto jsList = info[0].As<Napi::Array>();
     auto len = jsList.Length();
-    for (uint32_t i = 1; i < len; ++i)
+    for (uint32_t i = 0; i < len; ++i)
     {
         auto each_bbox = jsList[i];
         if (!each_bbox.IsArray()){
@@ -81,7 +78,7 @@ Napi::Value SortNode::update(const Napi::CallbackInfo& info) {
                     .ThrowAsJavaScriptException();
                 return env.Null();
             }
-            current_bbox.push_back(float(val.As<Napi::Number>().DoubleValue()));
+            current_bbox.push_back((float)val.As<Napi::Number>().DoubleValue());
         }
         dets.push_back(current_bbox);
     }
@@ -124,11 +121,11 @@ Napi::Value SortNode::update(const Napi::CallbackInfo& info) {
 
     // Now return it back as JS array
     auto jsOutputList = Napi::Array::New(env);
-    for (auto i = 0; i < res.size(); i++)
+    for (uint32_t i = 0; i < res.size(); i++)
     {
         auto bbox = res[i];
         auto jsBbox = Napi::Array::New(env);
-        for (auto j = 0; j < bbox.size(); j++){
+        for (uint32_t j = 0; j < bbox.size(); j++){
             jsBbox[j] = Napi::Number::New(env, bbox[j]);
         }
         jsOutputList[i] = jsBbox;
