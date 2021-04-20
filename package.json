@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Techainer/sort-cpp.git"
+    "url": "git+https://github.com/Techainer/sort-node.git"
   },
   "keywords": [
     "sort",
@@ -24,7 +24,7 @@
   "author": "linus",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Techainer/sort-cpp/issues"
+    "url": "https://github.com/Techainer/sort-node/issues"
   },
-  "homepage": "https://github.com/Techainer/sort-cpp#readme"
+  "homepage": "https://github.com/Techainer/sort-node#readme"
 }
