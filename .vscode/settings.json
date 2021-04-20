@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "memory": "cpp",
+        "utility": "cpp",
+        "chrono": "cpp"
+    }
+}

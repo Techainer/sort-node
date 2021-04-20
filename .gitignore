@@ -4,3 +4,4 @@ build/
 cmake-*/
 mot_benchmark/
 output/
+node_modules/
