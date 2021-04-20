@@ -57,14 +57,15 @@ Napi::Value SortNode::update(const Napi::CallbackInfo& info) {
     auto len = jsList.Length();
     for (uint32_t i = 0; i < len; ++i)
     {
-        auto each_bbox = jsList[i];
-        if (!each_bbox.IsArray()){
+        Napi::Value _each_bbox = jsList[i];
+        if (!_each_bbox.IsArray()){
             Napi::TypeError::New(env, "dets must have format: List[List[x1, y1, w, h, conf]]")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
+        auto each_bbox = _each_bbox.As<Napi::Array>();
         auto each_bbox_len = each_bbox.Length();
-        if (len != 5){
+        if (each_bbox_len != 5){
             Napi::TypeError::New(env, "each bbox must have format [x1, y1, w, h, conf]")
                 .ThrowAsJavaScriptException();
             return env.Null();
@@ -72,13 +73,13 @@ Napi::Value SortNode::update(const Napi::CallbackInfo& info) {
 
         std::vector<float> current_bbox;
         for (uint32_t j = 0; j < 5; j++){
-            auto val = each_bbox[j];
-            if (!val.IsNumber()){
+            Napi::Value _val = each_bbox[j];
+            if (!_val.IsNumber()){
                 Napi::TypeError::New(env, "each value x1, y1, w, h, conf must be a number")
                     .ThrowAsJavaScriptException();
                 return env.Null();
             }
-            current_bbox.push_back((float)val.As<Napi::Number>().DoubleValue());
+            current_bbox.push_back((float)_val.As<Napi::Number>().DoubleValue());
         }
         dets.push_back(current_bbox);
     }
