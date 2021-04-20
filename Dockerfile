@@ -1,7 +1,5 @@
 FROM valian/docker-python-opencv-ffmpeg:py3
 
-MAINTAINER Yasen Hu(yasenhu789@gmail.com)
-
 RUN apt-get update -y && \
     apt-get install -y \
     libvtk-java \
@@ -16,7 +14,7 @@ RUN apt-get update -y && \
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #Add new sudo user
-ARG USERNAME=yasen
+ARG USERNAME=linus
 ARG UID=1000
 ARG GID=1000
 
