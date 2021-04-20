@@ -35,7 +35,7 @@ file(GLOB SOURCE_FILES src/*.cpp src/*.cc)
 
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+# add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 
