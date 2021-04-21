@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [master, ci]
+  pull_request:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+
+      - name: Install OpenCV
+        uses: Dovyski/setup-opencv-action@v1
+        with:
+          opencv-version: '3.4.2'
+
+      - name: Install packages
+        run: yarn upgrade --dev
+
+      - name: Prebuild
+        run: yarn build-prebuild
+
+      - name: Build
+        run: yarn install
+
+      - name: Run test suite
+        run: yarn test
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: artifact-${{ matrix.os }}
+          path: prebuilds/**/*.tar.gz
