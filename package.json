@@ -11,7 +11,6 @@
   },
   "scripts": {
     "install": "prebuild-install -r napi || cmake-js compile",
-    "build": "node build.js",
     "compile": "cmake-js compile",
     "rebuild": "cmake-js rebuild",
     "test": "node ./test/test_binding.js",
