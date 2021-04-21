@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+        os: [windows-latest] # macos-latest, ubuntu-latest, 
     if: "!contains(github.event.head_commit.message, 'ci skip')"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -42,9 +42,16 @@ jobs:
         if: ${{ matrix.os == 'macos-latest'}}
         run: brew install opencv3 eigen
 
-      - name: Install OpenCV and Eigen for Windows
+      - name: Install OpenCV for Windows
         if: ${{ matrix.os == 'windows-latest'}}
-        run: choco install opencv eigen
+        run: choco install opencv
+
+      - name: Install Eigen for Windows
+        if: ${{ matrix.os == 'windows-latest'}}
+        run: |
+          curl -kLSs https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.zip eigen-3.3.9.zip
+          unzip eigen-3.3.9.zip -d "C:\eigen"
+          mv C:\eigen\eigen-3.3.9 C:\eigen\Eigen3
 
       - name: Install packages
         run: yarn upgrade --dev
