@@ -1,21 +1,25 @@
-const SortNode = require("../lib/binding.js");
+const sortnode = require("../lib");
+console.log("Hehe loaded")
 const assert = require("assert");
 
-assert(SortNode, "The expected module is undefined");
+assert(sortnode.SortNode, "The expected module is undefined");
 
 function testBasic()
 {
-    const instance = new SortNode("mr-yeoman");
-    assert(instance.greet, "The expected method is not defined");
-    assert.strictEqual(instance.greet("kermit"), "mr-yeoman", "Unexpected value returned");
+    const kMinHits = 3;
+    const kMinConfidence = 0.3;
+    const instance = new sortnode.SortNode(kMinHits, kMinConfidence);
+    assert(instance.update, "The expected method is not defined");
+
+    // assert.strictEqual(instance.update("kermit"), "mr-yeoman", "Unexpected value returned");
 }
 
-function testInvalidParams()
-{
-    const instance = new SortNode();
-}
+// function testInvalidParams()
+// {
+//     const instance = new SortNode("lol_hehe");
+// }
 
 assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");
-assert.throws(testInvalidParams, undefined, "testInvalidParams didn't throw");
+// assert.throws(testInvalidParams, undefined, "testInvalidParams didn't throw");
 
 console.log("Tests passed- everything looks OK!");

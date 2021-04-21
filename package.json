@@ -1,13 +1,21 @@
 {
-  "main": "lib/binding.js",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">= 14.0.0"
+  },
   "dependencies": {
-    "node-addon-api": "^1.1.0"
+    "bindings": "~1.2.1",
+    "node-addon-api": "^3.0.0",
+    "prebuild": "^10.0.1",
+    "prebuild-install": "^6.0.0"
   },
   "scripts": {
-    "install": "cmake-js compile",
-    "test": "node --napi-modules ./test/test_binding.js"
+    "install": "prebuild-install -r napi || cmake-js compile",
+    "build": "node build.js",
+    "compile": "cmake-js compile",
+    "rebuild": "cmake-js rebuild",
+    "test": "node ./test/test_binding.js"
   },
-  "gypfile": true,
   "name": "sort-node",
   "description": "Node binding of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
   "version": "1.0.0",
@@ -30,5 +38,10 @@
   "homepage": "https://github.com/Techainer/sort-node#readme",
   "devDependencies": {
     "cmake-js": "^6.1.0"
+  },
+  "binary": {
+    "napi_versions": [
+      3
+    ]
   }
 }

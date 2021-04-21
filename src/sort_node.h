@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SORTNODE_H
+#define SORTNODE_H
 
 #include <iostream>
 #include <vector>
@@ -6,17 +7,21 @@
 #include "tracker.h"
 #include <napi.h>
 
-class SortNode : public Napi::ObjectWrap<SortNode>
+namespace sortnode
 {
-public:
-    int kMinHits = 3;
-    int kMaxCoastCycles = 1;
-    float kkMinConfidence = 0.6;
-    int frame_index = 0;
-    Tracker tracker;
+    class SortNode : public Napi::ObjectWrap<SortNode>
+    {
+    public:
+        int kMinHits = 3;
+        int kMaxCoastCycles = 1;
+        float kkMinConfidence = 0.6;
+        int frame_index = 0;
+        Tracker tracker;
 
-    SortNode(const Napi::CallbackInfo&);
-    Napi::Value update(const Napi::CallbackInfo&);
+        static Napi::Object Init(Napi::Env env, Napi::Object exports);
+        SortNode(const Napi::CallbackInfo& info);
 
-    static Napi::Function GetClass(Napi::Env);
-};
+        Napi::Value update(const Napi::CallbackInfo& info);
+    };
+} // namespace sortnode
+#endif

@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 cmake_policy(SET CMP0042 NEW)
 set (CMAKE_CXX_STANDARD 11)
+
 project(sort-cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+# set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # Try to find OpenCV
 find_package(OpenCV REQUIRED)
@@ -21,7 +22,7 @@ else ()
 endif()
 
 # Try to find Boost
-find_package(Boost COMPONENTS program_options filesystem REQUIRED)
+find_package(Boost COMPONENTS filesystem REQUIRED)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 else ()
@@ -31,11 +32,11 @@ endif()
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${CMAKE_JS_INC})
 
-file(GLOB SOURCE_FILES src/*.cpp src/*.cc)
+file(GLOB SOURCE_FILES src/*.cpp src/*.cc src/*.h)
 
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
-# add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+# add_executable(${CMAKE_PROJECT_NAME}-bin ${SOURCE_FILES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 
@@ -43,16 +44,17 @@ target_link_libraries (
     ${CMAKE_PROJECT_NAME}
     ${OpenCV_LIBS}
     ${Boost_LIBRARIES}
-    ${CMAKE_JS_LIB}
 )
+
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
 
 # Include Node-API wrappers
 execute_process(COMMAND node -p "require('node-addon-api').include"
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         OUTPUT_VARIABLE NODE_ADDON_API_DIR
         )
-string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
-string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+string(REGEX REPLACE "[\r\n\"]" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
 # define NPI_VERSION

@@ -14,7 +14,7 @@ RUN apt-get update -y && \
 
 # Install NodeJS
 RUN apt-get install -y curl && \
-    curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt -y install nodejs
 
 # Install cmake
@@ -28,18 +28,18 @@ RUN npm set unsafe-perm true && npm install -g yarn
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# #Add new sudo user
-# ARG USERNAME=linus
-# ARG UID=1000
-# ARG GID=1000
+#Add new sudo user
+ARG USERNAME=linus
+ARG UID=1000
+ARG GID=1000
 
-# RUN useradd -m $USERNAME
-# RUN usermod -aG sudo $USERNAME
-# RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-# # Replace 1000 with your user/group id
-# RUN usermod --uid $UID $USERNAME && groupmod --gid $GID $USERNAME
+RUN useradd -m $USERNAME
+RUN usermod -aG sudo $USERNAME
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Replace 1000 with your user/group id
+RUN usermod --uid $UID $USERNAME && groupmod --gid $GID $USERNAME
 
-# # Change user
-# USER $USERNAME
-# WORKDIR /home/$USERNAME
+# Change user
+USER $USERNAME
+WORKDIR /home/$USERNAME
 
