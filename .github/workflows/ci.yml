@@ -47,13 +47,13 @@ jobs:
         uses: s-weigand/setup-conda@v1
 
       - name: Install OpenCV for Windows
-          if: ${{ matrix.os == 'windows-latest'}}
-          run: |
-            cd .github/workflows/scripts
-            python main.py
-            installOpenCV_modified.bat
-            python modifyBatchScript.py
-            finalScript.bat
+        if: ${{ matrix.os == 'windows-latest'}}
+        run: |
+          cd .github/workflows/scripts
+          python main.py
+          installOpenCV_modified.bat
+          python modifyBatchScript.py
+          finalScript.bat
 
       - name: Install Eigen for Windows
         if: ${{ matrix.os == 'windows-latest'}}
