@@ -28,10 +28,23 @@ jobs:
         with:
           node-version: "14"
 
-      - name: Install OpenCV
+      - name: Install OpenCV for Linux
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: Dovyski/setup-opencv-action@v1
         with:
           opencv-version: '3.4.2'
+
+      - name: Install Eigen for Linux
+        if: ${{ matrix.os == 'ubuntu-latest'}}
+        run: sudo apt-get update && sudo apt-get install -y libeigen3-dev
+
+      - name: Install OpenCV and Eigen for Mac
+        if: ${{ matrix.os == 'macos-latest'}}
+        run: brew install opencv3 eigen
+
+      - name: Install OpenCV and Eigen for Windows
+        if: ${{ matrix.os == 'windows-latest'}}
+        run: choco install opencv eigen
 
       - name: Install packages
         run: yarn upgrade --dev
