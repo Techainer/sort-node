@@ -52,7 +52,7 @@ namespace sortnode
         }
 
         this->kMinHits = int(kMinHits);
-        this->kkMinConfidence = float(info[1].As<Napi::Number>().DoubleValue());
+        this->kMinConfidence = float(info[1].As<Napi::Number>().DoubleValue());
     }
 
     Napi::Value SortNode::update(const Napi::CallbackInfo& info)
@@ -118,7 +118,7 @@ namespace sortnode
         std::vector<cv::Rect> bbox_per_frame;
         for (auto &each_bbox : dets)
         {
-            if (each_bbox[4] >= this->kkMinConfidence)
+            if (each_bbox[4] >= this->kMinConfidence)
             {
                 bbox_per_frame.emplace_back(each_bbox[0], each_bbox[1], each_bbox[2], each_bbox[3]);
             }

@@ -14,7 +14,8 @@
     "build": "node build.js",
     "compile": "cmake-js compile",
     "rebuild": "cmake-js rebuild",
-    "test": "node ./test/test_binding.js"
+    "test": "node ./test/test_binding.js",
+    "build-prebuild": "prebuild -t 3 -r napi --include-regex \"\\.[nsd][oyl][dl]?[ie]?b?$\" --backend cmake-js"
   },
   "name": "sort-node",
   "description": "Node binding of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
@@ -30,8 +31,8 @@
     "sort",
     "tracking"
   ],
-  "author": "linus",
-  "license": "MIT",
+  "author": "lamhoangtung",
+  "license": "GPLV3",
   "bugs": {
     "url": "https://github.com/Techainer/sort-node/issues"
   },

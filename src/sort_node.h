@@ -14,7 +14,7 @@ namespace sortnode
     public:
         int kMinHits = 3;
         int kMaxCoastCycles = 1;
-        float kkMinConfidence = 0.6;
+        float kMinConfidence = 0.6;
         int frame_index = 0;
         Tracker tracker;
 
