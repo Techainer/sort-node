@@ -47,7 +47,7 @@ function testAccuracy()
     const dataFile = readFileSync(input_path)
     const all_detections = ProcessLabel(dataFile);
 
-    const gt_path = "./output/" + dataset_name + ".txt";
+    const gt_path = "./test/" + dataset_name + ".txt";
     const gtFile = readFileSync(gt_path)
     const groundTruth = gtFile.toString().split('\n')
     groundTruth.splice(-1, 1);
@@ -79,7 +79,7 @@ function testAccuracy()
     console.log(`FPS = ${total_frames / time_span}`)
     console.log("********************************")
 
-    assert.deepEqual(predicted, groundTruth, "Unexpected value returned");
+    assert.deepStrictEqual(predicted, groundTruth, "Unexpected value returned");
 
 }
 
