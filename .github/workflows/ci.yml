@@ -49,7 +49,8 @@ jobs:
       - name: Install Eigen for Windows
         if: ${{ matrix.os == 'windows-latest'}}
         run: |
-          curl -kLSs https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.zip eigen-3.3.9.zip
+          curl https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.zip -o eigen-3.3.9.zip -s
+          mkdir "C:\eigen"
           unzip eigen-3.3.9.zip -d "C:\eigen"
           mv C:\eigen\eigen-3.3.9 C:\eigen\Eigen3
 
