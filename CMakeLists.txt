@@ -21,7 +21,10 @@ else ()
     message(FATAL_ERROR "Could not locate OpenCV")
 endif()
 
-include_directories(${EIGEN_INCLUDE_DIR})
+if(APPLE)
+    # Trying to include path to Eigen that was installed by brew
+    include_directories("/usr/local/include")
+endif(APPLE)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${CMAKE_JS_INC})
 
