@@ -21,13 +21,6 @@ else ()
     message(FATAL_ERROR "Could not locate OpenCV")
 endif()
 
-# Try to find Boost
-find_package(Boost COMPONENTS filesystem REQUIRED)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-else ()
-    message(FATAL_ERROR "Could not locate Boost")
-endif()
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${CMAKE_JS_INC})
