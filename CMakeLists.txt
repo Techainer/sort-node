@@ -6,7 +6,7 @@ project(sort-cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-set(OpenCV_DIR "D:/a/sort-node/sort-node/.github/workflows/scripts/opencv-3.4.14/opencv/build/")
+# set(OpenCV_DIR "D:/a/sort-node/sort-node/.github/workflows/scripts/opencv-3.4.14/opencv/build/")
 
 # Try to find OpenCV
 find_package(OpenCV REQUIRED)
@@ -26,7 +26,7 @@ if(APPLE)
     # Trying to include path to Eigen that was installed by brew
     include_directories("/usr/local/include")
 elseif(WIN32)
-    include_directories( EIGEN3_INCLUDE_DIR )
+    include_directories( ${EIGEN3_INCLUDE_DIR} )
 endif()
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${CMAKE_JS_INC})
