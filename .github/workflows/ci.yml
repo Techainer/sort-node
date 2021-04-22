@@ -42,10 +42,6 @@ jobs:
         if: ${{ matrix.os == 'macos-latest'}}
         run: brew install opencv3 eigen
 
-      - name: Install conda on Windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        uses: s-weigand/setup-conda@v1
-
       - name: Install OpenCV for Windows
         if: ${{ matrix.os == 'windows-latest'}}
         run: |
