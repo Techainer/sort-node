@@ -1,6 +1,6 @@
 ::DO_NOT_CHANGE::
 ::============================================::
-set "cvVersion=master"
+set "cvVersion=3.4.14"
 echo Installing OpenCV-%cvVersion%
 ::============================================::
 mkdir opencv-%cvVersion%
