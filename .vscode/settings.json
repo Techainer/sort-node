@@ -2,6 +2,8 @@
     "files.associations": {
         "memory": "cpp",
         "utility": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "locale": "cpp",
+        "string": "cpp"
     }
 }
