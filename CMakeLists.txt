@@ -7,9 +7,12 @@ project(sort-cpp)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 # set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 if (WIN32)
+    message(STATUS "This is Windows")
     set(OpenCV_DIR $ENV{OpenCV_DIR})
     set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR})
 endif()
+
+execute_process(COMMAND echo "OpenCV_DIR is ${OpenCV_DIR}")
 
 # Try to find OpenCV
 find_package(OpenCV REQUIRED)
