@@ -24,7 +24,9 @@ endif()
 if(APPLE)
     # Trying to include path to Eigen that was installed by brew
     include_directories("/usr/local/include")
-endif(APPLE)
+elseif(WIN32)
+    include_directories( EIGEN3_INCLUDE_DIR )
+endif()
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${CMAKE_JS_INC})
 
