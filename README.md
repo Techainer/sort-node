@@ -1,4 +1,7 @@
 # SortNode
+
+[![npm version](https://badge.fury.io/js/%40techainer1t%2Fsort-node.svg)](https://badge.fury.io/js/%40techainer1t%2Fsort-node) [![CI](https://github.com/Techainer/sort-node/actions/workflows/ci.yml/badge.svg)](https://github.com/Techainer/sort-node/actions/workflows/ci.yml) [![publish-prebuild](https://github.com/Techainer/sort-node/actions/workflows/publish-prebuild.yml/badge.svg)](https://github.com/Techainer/sort-node/actions/workflows/publish-prebuild.yml)
+
 SortNode is a JS binding for SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.
 
 This package is maintained by [Techainer](https://techainer.com)
