@@ -56,6 +56,10 @@ jobs:
         run: |
           cd .github/workflows/scripts
           ./installOpenCV.bat
+      
+      - name: Set OpenCV_DIR
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
           setx OpenCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build
           echo "OpenCV_DIR=D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build" >> $GITHUB_ENV
 
