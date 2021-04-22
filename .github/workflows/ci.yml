@@ -60,8 +60,8 @@ jobs:
       - name: Set OpenCV_DIR
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
-          setx OpenCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build\install
-          echo "OpenCV_DIR=D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build\install" >> $GITHUB_ENV
+          setx OpenCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build\
+          echo "OpenCV_DIR=D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build\" >> $GITHUB_ENV
 
       - name: Install Eigen for Windows
         if: ${{ matrix.os == 'windows-latest' }}
@@ -75,7 +75,15 @@ jobs:
       - name: Install packages
         run: yarn upgrade --dev
 
-      - name: Prebuild
+      - name: Prebuild for Unix
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: yarn build-prebuild
+
+      - name: Prebuild for Windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        env:
+          OpenCV_DIR: D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build\install
+          EIGEN3_INCLUDE_DIR: C:\eigen
         run: yarn build-prebuild
 
       - name: Build
