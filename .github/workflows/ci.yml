@@ -61,7 +61,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           setx OpenCV_DIR D:/a/sort-node/sort-node/.github/workflows/scripts/opencv-3.4.14/opencv/build/
-          setx EIGEN3_INCLUDE_DIR 
+          setx EIGEN3_INCLUDE_DIR C:/eigen
           echo "OpenCV_DIR=D:/a/sort-node/sort-node/.github/workflows/scripts/opencv-3.4.14/opencv/build/" >> $GITHUB_ENV
           echo "EIGEN3_INCLUDE_DIR=C:/eigen" >> $GITHUB_ENV
 
