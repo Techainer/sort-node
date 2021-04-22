@@ -57,29 +57,29 @@ jobs:
           ./installOpenCV.bat
           setx OPENCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build
 
-      - name: Install Eigen for Windows
-        if: ${{ matrix.os == 'windows-latest'}}
-        run: |
-          curl https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.zip -o eigen-3.3.9.zip -s
-          mkdir "C:\eigen"
-          unzip eigen-3.3.9.zip -d "C:\eigen"
-          mv C:\eigen\eigen-3.3.9 C:\eigen\Eigen3
-          setx EIGEN3_INCLUDE_DIR C:\eigen
+      # - name: Install Eigen for Windows
+      #   if: ${{ matrix.os == 'windows-latest'}}
+      #   run: |
+      #     curl https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.zip -o eigen-3.3.9.zip -s
+      #     mkdir "C:\eigen"
+      #     unzip eigen-3.3.9.zip -d "C:\eigen"
+      #     mv C:\eigen\eigen-3.3.9 C:\eigen\Eigen3
+      #     setx EIGEN3_INCLUDE_DIR C:\eigen
 
-      - name: Install packages
-        run: yarn upgrade --dev
+      # - name: Install packages
+      #   run: yarn upgrade --dev
 
-      - name: Prebuild
-        run: yarn build-prebuild
+      # - name: Prebuild
+      #   run: yarn build-prebuild
 
-      - name: Build
-        run: yarn install
+      # - name: Build
+      #   run: yarn install
 
-      - name: Run test suite
-        run: yarn test
+      # - name: Run test suite
+      #   run: yarn test
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: artifact-${{ matrix.os }}
-          path: prebuilds/**/*.tar.gz
+      # - name: Upload artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: artifact-${{ matrix.os }}
+      #     path: prebuilds/**/*.tar.gz
