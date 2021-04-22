@@ -52,7 +52,8 @@ jobs:
           cd .github/workflows/scripts
           python main.py
           ./installOpenCV_modified.bat
-          python modifyBatchScript.py
+          cd .github/workflows/scripts
+          python modifyBatchScripy.py
           ./finalScript.bat
 
       - name: Install Eigen for Windows
