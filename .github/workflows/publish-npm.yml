@@ -27,9 +27,6 @@ jobs:
       - name: Install packages
         run: yarn upgrade --dev
 
-      - name: Build
-        run: yarn install
-
       - name: Publish
         run: yarn publish --access public
         env:
