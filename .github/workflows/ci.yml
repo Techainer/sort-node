@@ -33,6 +33,7 @@ jobs:
         uses: Dovyski/setup-opencv-action@v1
         with:
           opencv-version: '3.4.2'
+          opencv-extra-modules: false
 
       - name: Install Eigen for Linux
         if: ${{ matrix.os == 'ubuntu-latest'}}
@@ -46,10 +47,7 @@ jobs:
         if: ${{ matrix.os == 'windows-latest'}}
         run: |
           cd .github/workflows/scripts
-          python main.py
-          ./installOpenCV_modified.bat
-          python modifyBatchScripy.py
-          ./finalScript.bat
+          ./installOpenCV.bat
 
       - name: Install Eigen for Windows
         if: ${{ matrix.os == 'windows-latest'}}

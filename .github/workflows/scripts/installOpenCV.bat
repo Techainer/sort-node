@@ -1,15 +1,17 @@
+::@echo off
+setlocal enabledelayedexpansion
 ::DO_NOT_CHANGE::
 ::============================================::
-set "cvVersion=3.4.14"
+set cvVersion=3.4.14
 echo Installing OpenCV-%cvVersion%
 ::============================================::
 mkdir opencv-%cvVersion%
 cd opencv-%cvVersion%
 mkdir Installation
 set count=1
-set "cwd=%cd%"
+set cwd=%cd%
 ::============================================::
-echo "Downloading opencv from github"
+echo Downloading opencv from github
 ::download opencv from git
 git clone https://github.com/opencv/opencv.git
 cd opencv
@@ -17,7 +19,7 @@ cd opencv
 git checkout %cvVersion%
 cd ..
 ::============================================::
-echo "Compiling using cmake"
+echo Compiling using cmake
 cd opencv
 mkdir build
 cd build
