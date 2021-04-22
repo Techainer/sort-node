@@ -56,7 +56,7 @@ jobs:
         run: |
           cd .github/workflows/scripts
           ./installOpenCV.bat
-          setx OPENCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build
+          setx OpenCV_DIR D:\a\sort-node\sort-node\.github\workflows\scripts\opencv-3.4.14\opencv\build
 
       - name: Install Eigen for Windows
         if: ${{ matrix.os == 'windows-latest' }}
