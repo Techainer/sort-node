@@ -42,7 +42,7 @@ The `update` method will return a list of tracked object in the format `[List[Li
 Please noted that the number of returned object might not be the same as the number of inputed object.
 
 ```javascript
-const sortnode = require("sort-node");
+const sortnode = require("@techainer1t/sort-node");
 const kMinHits = 3;
 const kMinConfidence = 0.3;
 const tracker = sortnode.SortNode(kMinHists, kMinConfidence);
