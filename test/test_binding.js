@@ -50,6 +50,9 @@ function testAccuracy()
     const gt_path = "./test/" + dataset_name + ".txt";
     const gtFile = readFileSync(gt_path)
     const groundTruth = gtFile.toString().split('\n')
+    for (let i = 0; i < groundTruth.length; i++){
+        groundTruth[i] = groundTruth[i].trim();
+    }
     groundTruth.splice(-1, 1);
 
     const total_frames = all_detections.length;
