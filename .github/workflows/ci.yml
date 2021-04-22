@@ -47,7 +47,7 @@ jobs:
         uses: actions/cache@v2
         id: cache-opencv-windows
         with:
-          path: .github\workflows\scripts\opencv-3.4.14\opencv\build
+          path: .github\workflows\scripts\opencv-3.4.14
           key: ${{ runner.os }}-${{ hashFiles('.github/workflows/scripts/installOpenCV.bat') }}
 
       - name: Install OpenCV for Windows
