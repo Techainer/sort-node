@@ -52,7 +52,6 @@ jobs:
           cd .github/workflows/scripts
           python main.py
           ./installOpenCV_modified.bat
-          cd .github/workflows/scripts
           python modifyBatchScripy.py
           ./finalScript.bat
 
