@@ -1,0 +1,47 @@
+{
+  "main": "lib/index.js",
+  "engines": {
+    "node": "~10 >=10.20 || >=12.17"
+  },
+  "dependencies": {
+    "bindings": "~1.2.1",
+    "node-addon-api": "^3.0.0",
+    "prebuild": "^10.0.1",
+    "prebuild-install": "^6.0.0"
+  },
+  "scripts": {
+    "install": "prebuild-install -r napi || cmake-js compile",
+    "compile": "cmake-js compile",
+    "rebuild": "cmake-js rebuild",
+    "test": "node ./test/test_binding.js",
+    "build-prebuild": "prebuild -t 3 -r napi --include-regex \"\\.[nsd][oyl][dl]?[ie]?b?$\" --backend cmake-js"
+  },
+  "name": "sort-node",
+  "description": "Node binding of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
+  "version": "1.0.0",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Techainer/sort-node.git"
+  },
+  "keywords": [
+    "sort",
+    "tracking"
+  ],
+  "author": "lamhoangtung",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Techainer/sort-node/issues"
+  },
+  "homepage": "https://github.com/Techainer/sort-node#readme",
+  "devDependencies": {
+    "cmake-js": "^6.1.0"
+  },
+  "binary": {
+    "napi_versions": [
+      3
+    ]
+  }
+}

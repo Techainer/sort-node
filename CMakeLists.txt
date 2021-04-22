@@ -1,8 +1,17 @@
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.9)
+cmake_policy(SET CMP0042 NEW)
+set (CMAKE_CXX_STANDARD 11)
+
 project(sort-cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+if (WIN32)
+    # This help to find OpenCV and Eigen, some how cmake on
+    # Windows doesn't use ENV variables so I had to re-set it here
+    set(OpenCV_DIR $ENV{OpenCV_DIR})
+    set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR})
+endif()
 
 # Try to find OpenCV
 find_package(OpenCV REQUIRED)
@@ -18,22 +27,39 @@ else ()
     message(FATAL_ERROR "Could not locate OpenCV")
 endif()
 
-# Try to find Boost
-find_package(Boost COMPONENTS program_options filesystem REQUIRED)
-if(Boost_FOUND)
-    include_directories(${Boost_INCLUDE_DIRS})
-else ()
-    message(FATAL_ERROR "Could not locate Boost")
+if(APPLE)
+    # Trying to include path to Eigen that was installed by brew
+    include_directories("/usr/local/include")
+elseif(WIN32)
+    include_directories(${EIGEN3_INCLUDE_DIR})
 endif()
-
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CMAKE_JS_INC})
 
-file(GLOB SOURCE_FILES src/*.cpp)
+file(GLOB SOURCE_FILES src/*.cpp src/*.cc src/*.h)
 
-add_executable(${CMAKE_PROJECT_NAME} ${SOURCE_FILES})
+
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
+# add_executable(${CMAKE_PROJECT_NAME}-bin ${SOURCE_FILES})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 
 target_link_libraries (
-        ${CMAKE_PROJECT_NAME}
-        ${OpenCV_LIBS}
-        ${Boost_LIBRARIES}
+    ${CMAKE_PROJECT_NAME}
+    ${OpenCV_LIBS}
+    ${Boost_LIBRARIES}
 )
+
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB})
+
+# Include Node-API wrappers
+execute_process(COMMAND node -p "require('node-addon-api').include"
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        OUTPUT_VARIABLE NODE_ADDON_API_DIR
+        )
+string(REGEX REPLACE "[\r\n\"]" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
+
+# define NPI_VERSION
+add_definitions(-DNAPI_VERSION=3)

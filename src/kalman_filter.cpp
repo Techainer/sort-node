@@ -1,5 +1,8 @@
 #include "kalman_filter.h"
 
+#ifndef M_PI
+    #define M_PI 3.14159265358979323846
+#endif
 
 KalmanFilter::KalmanFilter(unsigned int num_states, unsigned int num_obs) :
         num_states_(num_states), num_obs_(num_obs) {

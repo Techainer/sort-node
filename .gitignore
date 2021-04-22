@@ -4,3 +4,7 @@ build/
 cmake-*/
 mot_benchmark/
 output/
+node_modules/
+package-lock.json
+.DS_Store
+prebuilds/

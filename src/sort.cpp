@@ -8,7 +8,7 @@ class SortTracker
 public:
     int kMinHits = 3;
     int kMaxCoastCycles = 1;
-    float kkMinConfidence = 0.6;
+    float kMinConfidence = 0.6;
     int frame_index = 0;
     Tracker tracker;
 
@@ -17,11 +17,11 @@ public:
         std::cout << "Initailized a new tracker" << std::endl;
     }
 
-    SortTracker(int kMinHits, float kkMinConfidence)
+    SortTracker(int kMinHits, float kMinConfidence)
     {
         std::cout << "Initailized a new tracker" << std::endl;
         this->kMinHits = kMinHits;
-        this->kkMinConfidence = kkMinConfidence;
+        this->kMinConfidence = kMinConfidence;
     }
 
     std::vector<std::vector<int>> update(std::vector<std::vector<float>> dets)
@@ -34,7 +34,7 @@ public:
         std::vector<cv::Rect> bbox_per_frame;
         for (auto &each_bbox : dets)
         {
-            if (each_bbox[4] >= this->kkMinConfidence)
+            if (each_bbox[4] >= this->kMinConfidence)
             {
                 bbox_per_frame.emplace_back(each_bbox[0], each_bbox[1], each_bbox[2], each_bbox[3]);
             }
