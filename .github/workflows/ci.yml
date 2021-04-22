@@ -37,7 +37,7 @@ jobs:
           key: cache-opencv-linux
 
       - name: Install OpenCV for Linux
-        if: matrix.os == 'ubuntu-latest' && steps.cache-opencv-linux.outputs.cache-hit != 'true'
+        if: matrix.os == 'ubuntu-latest'
         uses: Dovyski/setup-opencv-action@v1
         with:
           opencv-version: '3.4.2'

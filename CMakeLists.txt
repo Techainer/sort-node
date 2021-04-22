@@ -6,7 +6,7 @@ project(sort-cpp)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
-if (NOT APPLE)
+if (WIN32)
     # This help to find OpenCV and Eigen, some how cmake on
     # Windows doesn't use ENV variables so I had to re-set it here
     set(OpenCV_DIR $ENV{OpenCV_DIR})
