@@ -4,8 +4,8 @@ const assert = require("assert");
 
 assert(sortnode.SortNode, "The expected module is undefined");
 
-function testBasic()
-{
+function testBasic() {
+    console.log("Running testBasic");
     const kMinHits = 3;
     const kMinConfidence = 0.3;
     const instance = new sortnode.SortNode(kMinHits, kMinConfidence);
@@ -33,10 +33,8 @@ function ProcessLabel(dataFile) {
     return bbox;
 }
 
-function testAccuracy()
-{
+function getDataset() {
     const dataset_name = "ADL-Rundle-6";
-    const tracker = new sortnode.SortNode(3, 0.6);
     // Open label file and load detections from MOT dataset
     // Note that it can also be replaced by detections from you own detector
 
@@ -50,16 +48,26 @@ function testAccuracy()
     const gt_path = "./test/" + dataset_name + ".txt";
     const gtFile = readFileSync(gt_path)
     const groundTruth = gtFile.toString().split('\n')
-    for (let i = 0; i < groundTruth.length; i++){
+    for (let i = 0; i < groundTruth.length; i++) {
         groundTruth[i] = groundTruth[i].trim();
     }
     groundTruth.splice(-1, 1);
+    return [all_detections, groundTruth];
+}
+
+function testAccuracyWithoutLandmark() {
+    console.log("Running testAccuracyWithoutLandmark");
+    const data = getDataset()
+    const all_detections = data[0];
+    const groundTruth = data[1];
 
     const total_frames = all_detections.length;
 
+    const tracker = new sortnode.SortNode(3, 0.6);
     let frame_index = 0
     let predicted = [];
     const t1 = Date.now()
+
     for (let i = 0; i < total_frames; i++) {
         /*** Run SORT tracker ***/
         const detections = all_detections[i];
@@ -69,8 +77,11 @@ function testAccuracy()
 
         for (const object of res) {
             // Export to text file for metrics evaluation
-            const line = frame_index + "," + object[4] + "," + object[0] + "," + object[1]
-                + "," + object[2] + "," + object[3] + ",1,-1,-1,-1"
+            const bbox = object.bbox;
+            const track_id = object.track_id;
+            const landmarks = object.landmarks;
+            const line = frame_index + "," + track_id + "," + bbox[0] + "," + bbox[1]
+                + "," + bbox[2] + "," + bbox[3] + ",1,-1,-1,-1"
             predicted.push(line);
         }
     } // end of iterating all frames
@@ -86,13 +97,13 @@ function testAccuracy()
 
 }
 
-function testInvalidParams()
-{
+function testInvalidParams() {
+    console.log("Running testInvalidParams");
     const instance = new SortNode("lol_hehe");
 }
 
 assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");
-assert.doesNotThrow(testAccuracy, undefined, "testAccuracy threw an expection");
+assert.doesNotThrow(testAccuracyWithoutLandmark, undefined, "testAccuracyWithoutLandmark threw an expection");
 assert.throws(testInvalidParams, undefined, "testInvalidParams didn't throw");
 
 console.log("Tests passed- everything looks OK!");
