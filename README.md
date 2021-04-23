@@ -37,9 +37,9 @@ The `SortNode` object can be initialize with 2 arguments:
 
 With each frame, you will need to call `update` method.
 
-This method except a single arguments that had a the format `List[List[float]]`, which means a list of detected object in that frame. Each object will have the format: `[x_top, y_top, width, height, confidence]` or `[x_top, y_top, width, height, confidence, landmark_x1, landmark_y1, ...]` for addtional landmark associated with each bounding box
+This method expect a single arguments that had a the format `List[List[float]]`, which means a list of detected object in that frame. Each object will have the format: `[x_top, y_top, width, height, confidence]` or `[x_top, y_top, width, height, confidence, landmark_x1, landmark_y1, ...]` for additional landmark associated with each bounding box
 
-The `update` method will return a list of tracked object in the format `[List[Object]]`, each object will have the following structure:
+The `update` method will return a list of tracked object in the format `List[Object]`, each object will have the following structure:
 ```js
 {
     bbox: List[(int) x_top, y_top, width, height],
