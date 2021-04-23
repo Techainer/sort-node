@@ -94,7 +94,43 @@ function testAccuracyWithoutLandmark() {
     console.log("********************************")
 
     assert.deepStrictEqual(predicted, groundTruth, "Unexpected value returned");
+}
 
+function testKeepLandmark(){
+    console.log("Running testKeepLandmark")
+    const tracker = new sortnode.SortNode(3, 0.3);
+
+    let input = [
+        [120, 240, 50, 70, 0.9, 23, 24, 25, 26, 27, 28, 29, 30],
+        [220, 340, 60, 80, 0.92, 33, 34, 35, 36, 37, 38, 39, 40, 51, 52],
+        [320, 340, 70, 90, 0.91, 23, 24, 25, 26, 27, 28, 29, 50],
+    ]
+
+    let input_2 = [
+        [121, 242, 52, 71, 0.91, 123, 124, 125, 126, 127, 128, 129, 130],
+        [222, 342, 61, 81, 0.93, 133, 134, 135, 136, 137, 138, 139, 140],
+        [321, 344, 73, 91, 0.94, 123, 124, 125, 126, 127, 128, 129, 150, 31, 32],
+    ]
+
+    let t1 = Date.now()
+    for (let i = 0; i < 500; i++) {
+        let res = tracker.update(input)
+        for (let i = 0; i < res.length; i++) {
+            assert.deepStrictEqual(res[i].landmarks, input[i].slice(5, input[i].length), "Unexpected value returned")
+        }
+
+        let res_2 = tracker.update(input_2)
+        for (let i = 0; i < res_2.length; i++) {
+            assert.deepStrictEqual(res_2[i].landmarks, input_2[i].slice(5, input_2[i].length), "Unexpected value returned")
+        }
+    }
+    let t2 = Date.now()
+    let time_span = (t2 - t1) / 1000
+
+    console.log("********************************")
+    console.log(`Total tracking with landmarks took: ${time_span}s for ${1000} frames`)
+    console.log(`FPS = ${1000 / time_span}`)
+    console.log("********************************")
 }
 
 function testInvalidParams() {
@@ -104,6 +140,7 @@ function testInvalidParams() {
 
 assert.doesNotThrow(testBasic, undefined, "testBasic threw an expection");
 assert.doesNotThrow(testAccuracyWithoutLandmark, undefined, "testAccuracyWithoutLandmark threw an expection");
+assert.doesNotThrow(testKeepLandmark, undefined, "testKeepLandmark threw an expection");
 assert.throws(testInvalidParams, undefined, "testInvalidParams didn't throw");
 
 console.log("Tests passed- everything looks OK!");
