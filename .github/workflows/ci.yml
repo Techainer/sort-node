@@ -95,7 +95,7 @@ jobs:
         run: yarn build-prebuild
 
       - name: Build
-        run: yarn install
+        run: yarn install --build-from-source --verbose
 
       - name: Run test suite
         run: yarn test
