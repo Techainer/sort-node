@@ -4,7 +4,10 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include/"
+                "${workspaceFolder}/include/",
+                "/usr/local/Cellar/opencv/4.5.2/include/opencv4",
+                "${workspaceFolder}/node_modules/node-addon-api",
+                "~/anaconda3/envs/sort-cpp/include/node"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -12,7 +15,7 @@
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
-            "cppStandard": "c++98",
+            "cppStandard": "c++11",
             "intelliSenseMode": "macos-clang-x64"
         }
     ],

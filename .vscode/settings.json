@@ -4,6 +4,8 @@
         "utility": "cpp",
         "chrono": "cpp",
         "locale": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "ios": "cpp",
+        "iostream": "cpp"
     }
 }
