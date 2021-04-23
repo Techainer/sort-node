@@ -76,10 +76,10 @@ void Tracker::HungarianMatching(const std::vector<std::vector<float>>& iou_matri
 }
 
 
-void Tracker::AssociateDetectionsToTrackers(const std::vector<cv::Rect>& detection,
+void Tracker::AssociateDetectionsToTrackers(const std::vector<std::pair<cv::Rect, std::vector<float>>>& detection,
                                             std::map<int, Track>& tracks,
-                                            std::map<int, cv::Rect>& matched,
-                                            std::vector<cv::Rect>& unmatched_det,
+                                            std::map<int, std::pair<cv::Rect, std::vector<float>>>& matched,
+                                            std::vector<std::pair<cv::Rect, std::vector<float>>>& unmatched_det,
                                             float iou_threshold) {
 
     // Set all detection as unmatched if no tracks existing
@@ -89,6 +89,7 @@ void Tracker::AssociateDetectionsToTrackers(const std::vector<cv::Rect>& detecti
         }
         return;
     }
+    // TODO: Fix matched and unmatched to use std::pair<cv::Rect, std::vector<float>>
 
     std::vector<std::vector<float>> iou_matrix;
     // resize IOU matrix based on number of detection and tracks
@@ -103,7 +104,7 @@ void Tracker::AssociateDetectionsToTrackers(const std::vector<cv::Rect>& detecti
     for (size_t i = 0; i < detection.size(); i++) {
         size_t j = 0;
         for (const auto& trk : tracks) {
-            iou_matrix[i][j] = CalculateIou(detection[i], trk.second);
+            iou_matrix[i][j] = CalculateIou(detection[i].first, trk.second);
             j++;
         }
     }
@@ -134,7 +135,7 @@ void Tracker::AssociateDetectionsToTrackers(const std::vector<cv::Rect>& detecti
 }
 
 
-void Tracker::Run(const std::vector<cv::Rect>& detections) {
+void Tracker::Run(const std::vector<std::pair<cv::Rect, std::vector<float>>>& detections) {
 
     /*** Predict internal tracks from previous frame ***/
     for (auto &track : tracks_) {
@@ -142,9 +143,9 @@ void Tracker::Run(const std::vector<cv::Rect>& detections) {
     }
 
     // Hash-map between track ID and associated detection bounding box
-    std::map<int, cv::Rect> matched;
+    std::map<int, std::pair<cv::Rect, std::vector<float>>> matched;
     // vector of unassociated detections
-    std::vector<cv::Rect> unmatched_det;
+    std::vector<std::pair<cv::Rect, std::vector<float>>> unmatched_det;
 
     // return values - matched, unmatched_det
     if (!detections.empty()) {
