@@ -69,7 +69,7 @@ namespace sortnode
 
         if (!info[0].IsArray())
         {
-            Napi::TypeError::New(env, "dets must have format: List[List[x1, y1, w, h, conf]]")
+            Napi::TypeError::New(env, "dets must have format: List[List[x1, y1, w, h, conf]] or List[List[x1, y1, w, h, conf, landmark_x1, landmark_y1, ...]]")
                 .ThrowAsJavaScriptException();
             return env.Null();
         }
@@ -82,26 +82,32 @@ namespace sortnode
             Napi::Value _each_bbox = jsList[i];
             if (!_each_bbox.IsArray())
             {
-                Napi::TypeError::New(env, "dets must have format: List[List[x1, y1, w, h, conf]]")
+                Napi::TypeError::New(env, "dets must have format: List[List[x1, y1, w, h, conf]] or List[List[x1, y1, w, h, conf, landmark_x1, landmark_y1, ...]]")
                     .ThrowAsJavaScriptException();
                 return env.Null();
             }
             auto each_bbox = _each_bbox.As<Napi::Array>();
             auto each_bbox_len = each_bbox.Length();
-            if (each_bbox_len != 5)
+            if (each_bbox_len < 5)
             {
                 Napi::TypeError::New(env, "each bbox must have format [x1, y1, w, h, conf]")
                     .ThrowAsJavaScriptException();
                 return env.Null();
             }
 
+            if (each_bbox_len > 5 && (each_bbox_len - 5) % 2 != 0){
+                Napi::TypeError::New(env, "each bbox with landmark must have format [x1, y1, w, h, conf, landmark_x1, landmark_y1]")
+                    .ThrowAsJavaScriptException();
+                return env.Null();
+            }
+
             std::vector<float> current_bbox;
-            for (uint32_t j = 0; j < 5; j++)
+            for (uint32_t j = 0; j < each_bbox_len; j++)
             {
                 Napi::Value _val = each_bbox[j];
                 if (!_val.IsNumber())
                 {
-                    Napi::TypeError::New(env, "each value x1, y1, w, h, conf must be a number")
+                    Napi::TypeError::New(env, "each value x1, y1, w, h, conf, landmark_xn, landmark_yn, ... must be a float")
                         .ThrowAsJavaScriptException();
                     return env.Null();
                 }
@@ -115,12 +121,17 @@ namespace sortnode
         this->frame_index++;
 
         // Convert vector of number to cv::Rect to use
-        std::vector<cv::Rect> bbox_per_frame;
+        std::vector<std::pair<cv::Rect, std::vector<float>>> bbox_per_frame;
         for (auto &each_bbox : dets)
         {
             if (each_bbox[4] >= this->kMinConfidence)
             {
-                bbox_per_frame.emplace_back(each_bbox[0], each_bbox[1], each_bbox[2], each_bbox[3]);
+                cv::Rect rect{int(each_bbox[0]), int(each_bbox[1]), int(each_bbox[2]), int(each_bbox[3])};
+                std::vector<float> landmarks;
+                for (auto i = 5; i < each_bbox.size(); i++){
+                    landmarks.push_back(each_bbox[i]);
+                }
+                bbox_per_frame.push_back(std::make_pair(rect, landmarks));
             }
         }
 
@@ -128,8 +139,9 @@ namespace sortnode
         this->tracker.Run(bbox_per_frame);
         const auto tracks = this->tracker.GetTracks();
 
-        // Convert results from cv::Rect to normal int vector
+        // Convert results from cv::Rect to normal float vector
         std::vector<std::vector<int> > res;
+        std::vector<std::vector<float>> res_landmarks;
         for (auto &trk : tracks)
         {
             const auto &bbox = trk.second.GetStateAsBbox();
@@ -142,7 +154,9 @@ namespace sortnode
             {
                 std::vector<int> current_object{bbox.tl().x, bbox.tl().y, bbox.width, bbox.height, trk.first};
                 // Last value is track id
+                std::vector<float> landmarks = trk.second.landmarks;
                 res.push_back(current_object);
+                res_landmarks.push_back(landmarks);
             }
         }
 
@@ -152,11 +166,26 @@ namespace sortnode
         {
             auto bbox = res[i];
             auto jsBbox = Napi::Array::New(env);
-            for (uint32_t j = 0; j < bbox.size(); j++)
+            for (uint32_t j = 0; j < bbox.size() - 1; j++)
             {
                 jsBbox[j] = Napi::Number::New(env, bbox[j]);
             }
-            jsOutputList[i] = jsBbox;
+            // std::cout << "We got the bbox set" << std::endl;
+
+            auto landmarks = res_landmarks[i];
+            auto jsLandmarks = Napi::Array::New(env);
+            for (uint32_t j = 0; j < landmarks.size(); j++){
+                jsLandmarks[j] = Napi::Number::New(env, landmarks[j]);
+            }
+            // std::cout << "We got the landmarks set" << std::endl;
+
+            auto jsDict = Napi::Object::New(env);
+            jsDict.Set("bbox", jsBbox);
+            jsDict.Set("track_id", Napi::Number::New(env, bbox[4]));
+            jsDict.Set("landmarks", jsLandmarks);
+
+
+            jsOutputList[i] = jsDict;
         }
         return jsOutputList;
     }

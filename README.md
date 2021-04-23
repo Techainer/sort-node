@@ -9,7 +9,7 @@ This package is maintained by [Techainer](https://techainer.com)
 
 ## Install
 To install this package, make sure you have the following dependencies installed:
-- NodeJS 14.x.x
+- NodeJS 12+
 - cmake 3.9+
 - OpenCV 3.x.x (Build from source recommened)
 - Eigen 3.x.x (`sudo apt-get install -y libeigen3-dev`)
@@ -19,6 +19,8 @@ Noted that we have provide a `Dockerfile` contain all 3rd dependencies. To use i
 docker build -t sort .
 ./docker_run.sh
 ```
+Or you can reference our github actions [CI](.github/workflows/ci.yml) flow to install dependencies for your own OS.
+
 Then you can install the package from npm:
 
 ```bash
@@ -35,9 +37,16 @@ The `SortNode` object can be initialize with 2 arguments:
 
 With each frame, you will need to call `update` method.
 
-This method except a single arguments that had a the format `List[List[float]]`, which means a list of detected object in that frame. Each object will have the format: `[x_top, y_top, width, height, confidence]`.
+This method except a single arguments that had a the format `List[List[float]]`, which means a list of detected object in that frame. Each object will have the format: `[x_top, y_top, width, height, confidence]` or `[x_top, y_top, width, height, confidence, landmark_x1, landmark_y1, ...]` for addtional landmark associated with each bounding box
 
-The `update` method will return a list of tracked object in the format `[List[List[int]]`, each object will have the format: `[x_top, y_top, width, height, track_id]`
+The `update` method will return a list of tracked object in the format `[List[Object]]`, each object will have the following structure:
+```js
+{
+    bbox: List[(int) x_top, y_top, width, height],
+    track_id: int,
+    landmarks: List[(float) x1, y1, x2, y2, ..., x_n, y_n],
+}
+```
 
 Please noted that the number of returned object might not be the same as the number of inputed object.
 

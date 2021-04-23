@@ -27,13 +27,13 @@ public:
  * @param unmatched_det
  * @param iou_threshold
  */
-    static void AssociateDetectionsToTrackers(const std::vector<cv::Rect>& detection,
-                                       std::map<int, Track>& tracks,
-                                       std::map<int, cv::Rect>& matched,
-                                       std::vector<cv::Rect>& unmatched_det,
-                                       float iou_threshold = 0.3);
+    static void AssociateDetectionsToTrackers(const std::vector<std::pair<cv::Rect, std::vector<float>>> &detection,
+                                              std::map<int, Track> &tracks,
+                                              std::map<int, std::pair<cv::Rect, std::vector<float>>> &matched,
+                                              std::vector<std::pair<cv::Rect, std::vector<float>>> &unmatched_det,
+                                              float iou_threshold = 0.3);
 
-    void Run(const std::vector<cv::Rect>& detections);
+    void Run(const std::vector<std::pair<cv::Rect, std::vector<float>>> &detections);
 
     std::map<int, Track> GetTracks();
 

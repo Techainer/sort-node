@@ -66,7 +66,8 @@ void Track::Predict() {
 
 
 // Update matched trackers with assigned detections
-void Track::Update(const cv::Rect& bbox) {
+void Track::Update(const std::pair<cv::Rect, std::vector<float>> &bbox)
+{
 
     // get measurement update, reset coast cycle count
     coast_cycles_ = 0;
@@ -74,19 +75,18 @@ void Track::Update(const cv::Rect& bbox) {
     hit_streak_++;
 
     // observation - center_x, center_y, area, ratio
-    Eigen::VectorXd observation = ConvertBboxToObservation(bbox);
+    Eigen::VectorXd observation = ConvertBboxToObservation(bbox.first);
     kf_.Update(observation);
-
-
+    landmarks = bbox.second;
 }
-
 
 // Create and initialize new trackers for unmatched detections, with initial bounding box
-void Track::Init(const cv::Rect &bbox) {
-    kf_.x_.head(4) << ConvertBboxToObservation(bbox);
+void Track::Init(const std::pair<cv::Rect, std::vector<float>> &bbox)
+{
+    kf_.x_.head(4) << ConvertBboxToObservation(bbox.first);
+    landmarks = bbox.second;
     hit_streak_++;
 }
-
 
 /**
  * Returns the current bounding box estimate

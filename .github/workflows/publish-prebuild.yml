@@ -33,7 +33,7 @@ jobs:
         id: cache-opencv-linux
         with:
           path: /home/runner/work/sort-node/sort-node/opencv/build
-          key: cache-opencv-linux
+          key: cache-opencv-linux-2
 
       - name: Install OpenCV for Linux
         if: matrix.os == 'ubuntu-latest'
