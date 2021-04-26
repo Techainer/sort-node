@@ -135,7 +135,7 @@ void Tracker::AssociateDetectionsToTrackers(const std::vector<std::pair<cv::Rect
 }
 
 
-void Tracker::Run(const std::vector<std::pair<cv::Rect, std::vector<float>>>& detections) {
+void Tracker::Run(const std::vector<std::pair<cv::Rect, std::vector<float>>>& detections, int kMaxAge, float kIoUThreshold) {
 
     /*** Predict internal tracks from previous frame ***/
     for (auto &track : tracks_) {
@@ -149,7 +149,7 @@ void Tracker::Run(const std::vector<std::pair<cv::Rect, std::vector<float>>>& de
 
     // return values - matched, unmatched_det
     if (!detections.empty()) {
-        AssociateDetectionsToTrackers(detections, tracks_, matched, unmatched_det);
+        AssociateDetectionsToTrackers(detections, tracks_, matched, unmatched_det, kIoUThreshold);
     }
 
     /*** Update tracks with associated bbox ***/
@@ -168,7 +168,7 @@ void Tracker::Run(const std::vector<std::pair<cv::Rect, std::vector<float>>>& de
 
     /*** Delete lose tracked tracks ***/
     for (auto it = tracks_.begin(); it != tracks_.end();) {
-        if (it->second.coast_cycles_ > kMaxCoastCycles) {
+        if (it->second.coast_cycles_ > kMaxAge) {
             it = tracks_.erase(it);
         } else {
             it++;

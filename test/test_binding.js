@@ -7,8 +7,10 @@ assert(sortnode.SortNode, "The expected module is undefined");
 function testBasic() {
     console.log("Running testBasic");
     const kMinHits = 3;
+    const kMaxAge = 1;
     const kMinConfidence = 0.3;
-    const instance = new sortnode.SortNode(kMinHits, kMinConfidence);
+    const kIoUThreshold = 0.3;
+    const instance = new sortnode.SortNode(kMinHits, kMaxAge, kIoUThreshold, kMinConfidence);
     assert(instance.update, "The expected method is not defined");
 }
 
@@ -63,7 +65,7 @@ function testAccuracyWithoutLandmark() {
 
     const total_frames = all_detections.length;
 
-    const tracker = new sortnode.SortNode(3, 0.6);
+    const tracker = new sortnode.SortNode(3, 1, 0.3, 0.6);
     let frame_index = 0
     let predicted = [];
     const t1 = Date.now()
@@ -98,7 +100,7 @@ function testAccuracyWithoutLandmark() {
 
 function testKeepLandmark(){
     console.log("Running testKeepLandmark")
-    const tracker = new sortnode.SortNode(3, 0.3);
+    const tracker = new sortnode.SortNode(3, 1, 0.3, 0);
 
     let input = [
         [120, 240, 50, 70, 0.9, 23, 24, 25, 26, 27, 28, 29, 30],

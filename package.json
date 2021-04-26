@@ -18,7 +18,7 @@
   },
   "name": "@techainer1t/sort-node",
   "description": "Node binding of SORT: Simple, online, and real-time tracking of multiple objects in a video sequence.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "directories": {
     "doc": "docs"
   },
