@@ -13,7 +13,9 @@ namespace sortnode
     {
     public:
         int kMinHits = 3;
+        int kMaxAge = 1;
         int kMaxCoastCycles = 1;
+        float kIoUThreshold = 0.3;
         float kMinConfidence = 0.6;
         int frame_index = 0;
         Tracker tracker;

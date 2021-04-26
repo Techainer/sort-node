@@ -33,7 +33,7 @@ public:
                                               std::vector<std::pair<cv::Rect, std::vector<float>>> &unmatched_det,
                                               float iou_threshold = 0.3);
 
-    void Run(const std::vector<std::pair<cv::Rect, std::vector<float>>> &detections);
+    void Run(const std::vector<std::pair<cv::Rect, std::vector<float>>> &detections, int kMaxAge, float kIoUThreshold);
 
     std::map<int, Track> GetTracks();
 

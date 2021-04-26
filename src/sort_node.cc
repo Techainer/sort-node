@@ -22,9 +22,9 @@ namespace sortnode
         Napi::Env env = info.Env();
         Napi::HandleScope scope(env);
 
-        if (info.Length() < 2 || info.Length() > 2)
+        if (info.Length() < 4 || info.Length() > 4)
         {
-            Napi::TypeError::New(env, "SortTracker constructor received wrong number of arguments: kMinHits, kMinConfidence")
+            Napi::TypeError::New(env, "SortTracker constructor received wrong number of arguments, expect: kMinHits, kMaxAge, kIoUThreshold, kMinConfidence")
                 .ThrowAsJavaScriptException();
             return;
         }
@@ -37,14 +37,36 @@ namespace sortnode
         }
 
         auto kMinHits = info[0].As<Napi::Number>().DoubleValue();
-        if (fmod(kMinHits, 1) != 0)
+        if (fmod(kMinHits, 1) != 0 || kMinHits < 0)
         {
-            Napi::TypeError::New(env, "kMinHits must be an interger")
+            Napi::TypeError::New(env, "kMinHits must be an interger greater than 0")
                 .ThrowAsJavaScriptException();
             return;
         }
 
-        if (!info[1].IsNumber() || info[1].As<Napi::Number>().DoubleValue() > 1 || info[1].As<Napi::Number>().DoubleValue() < 0)
+        if (!info[1].IsNumber())
+        {
+            Napi::TypeError::New(env, "kMaxAge must be an interger")
+                .ThrowAsJavaScriptException();
+            return;
+        }
+
+        auto kMaxAge = info[1].As<Napi::Number>().DoubleValue();
+        if (fmod(kMaxAge, 1) != 0 || kMaxAge < 0)
+        {
+            Napi::TypeError::New(env, "kMaxAge must be an interger greater than 0")
+                .ThrowAsJavaScriptException();
+            return;
+        }
+
+        if (!info[2].IsNumber() || info[2].As<Napi::Number>().DoubleValue() > 1 || info[2].As<Napi::Number>().DoubleValue() < 0)
+        {
+            Napi::TypeError::New(env, "kIoUThreshold must be a float between 0 and 1")
+                .ThrowAsJavaScriptException();
+            return;
+        }
+
+        if (!info[3].IsNumber() || info[3].As<Napi::Number>().DoubleValue() > 1 || info[3].As<Napi::Number>().DoubleValue() < 0)
         {
             Napi::TypeError::New(env, "kMinConfidence must be a float between 0 and 1")
                 .ThrowAsJavaScriptException();
@@ -52,7 +74,9 @@ namespace sortnode
         }
 
         this->kMinHits = int(kMinHits);
-        this->kMinConfidence = float(info[1].As<Napi::Number>().DoubleValue());
+        this->kMaxAge = int(kMaxAge);
+        this->kIoUThreshold = float(info[2].As<Napi::Number>().DoubleValue());
+        this->kMinConfidence = float(info[3].As<Napi::Number>().DoubleValue());
     }
 
     Napi::Value SortNode::update(const Napi::CallbackInfo& info)
@@ -136,7 +160,7 @@ namespace sortnode
         }
 
         // Run SORT tracker
-        this->tracker.Run(bbox_per_frame);
+        this->tracker.Run(bbox_per_frame, this->kMaxAge, this->kIoUThreshold);
         const auto tracks = this->tracker.GetTracks();
 
         // Convert results from cv::Rect to normal float vector
