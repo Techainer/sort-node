@@ -31,8 +31,10 @@ yarn add sort-node@npm:@techainer1t/sort-node
 
 The `sort-node` package contain the object `SortNode` that can be use to track object detected from a single video or camera.
 
-The `SortNode` object can be initialize with 2 arguments:
-- `kMinHits`: (int) Minimum number of hits before a bounding box was assigned a new track ID
+The `SortNode` object can be initialize with 4 arguments in the following order:
+- `kMinHits`: (int) Minimum number of hits before a bounding box was assigned a new track ID (should be 3)
+- `kMaxAge`: (int) Maximum number of frames to keep alive a track without associated detections
+- `kIoUThreshold`: (float between 0 and 1) Minimum IOU for match (should be 0.3)
 - `kMinConfidence`: (float between 0 and 1) Bouding boxes with confidence score less than this value will be ignored
 
 With each frame, you will need to call `update` method.
@@ -53,8 +55,10 @@ Please noted that the number of returned object might not be the same as the num
 ```javascript
 const sortnode = require("@techainer1t/sort-node");
 const kMinHits = 3;
+const kMaxAge = 1;
+const kIoUThreshold = 0.3;
 const kMinConfidence = 0.3;
-const tracker = sortnode.SortNode(kMinHists, kMinConfidence);
+const tracker = sortnode.SortNode(kMinHits, kMaxAge, kIoUThreshold, kMinConfidence);
 while (true){
     // Call the object detector
     ...
